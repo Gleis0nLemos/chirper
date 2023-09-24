@@ -17,8 +17,11 @@ new class extends Component
     }
     
     #[On('chirps-created')]
+    #[On('chirps-updated')]
     public function getChirps(): void
     {
+        $this->editing = null;
+
         $this->chirps = Chirp::with('user')
             ->latest()
             ->get();
@@ -27,6 +30,12 @@ new class extends Component
     public function edit(Chirp $chirp): void
     {
         $this->editing = $chirp;
+    }
+
+    #[On('chirp-edit-canceled')]
+    public function cancelEditing(): void
+    {
+        $this->editing = null;
     }
 }; ?>
 
