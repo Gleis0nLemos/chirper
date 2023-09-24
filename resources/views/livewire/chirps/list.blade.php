@@ -33,9 +33,18 @@ new class extends Component
     }
 
     #[On('chirp-edit-canceled')]
-    public function cancelEditing(): void
+    public function cancelEdit(): void
     {
         $this->editing = null;
+    }
+
+    public function delete(Chirp $chirp): void
+    {
+        $this->authorize('delete', $chirp); 
+
+        $chirp->delete();
+
+        $this->getChirps();  
     }
 }; ?>
 
@@ -79,6 +88,8 @@ new class extends Component
                                 <x-dropdown-link wire:click="edit({{ $chirp->id }})">
                                     {{ __('Edit') }}
                                 </x-dropdown-link>
+                                <x-dropdown-link wire:click="delete({{ $chirp->id }})">
+                                    {{ __('Delete') }}
                             </x-slot>
                         </x-dropdown>
                     @endif 
